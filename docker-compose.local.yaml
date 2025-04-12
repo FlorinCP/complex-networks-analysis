@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  network_analysis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+      - ./data:/app/data
+      - ./results:/app/results
+    # Container will stay running in the background
+    # To run Python scripts, use: docker-compose exec network_analysis python your_script.py
