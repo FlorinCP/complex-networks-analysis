@@ -1,7 +1,7 @@
 import os
 
 DATA_DIR = "data/A3_synthetic_networks"
-RESULTS_DIR = "../results"
+RESULTS_DIR = "./results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 N_NODES = 300

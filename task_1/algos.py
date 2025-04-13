@@ -7,7 +7,6 @@ def run_infomap(G):
     im = infomap.Infomap("--two-level")
 
     for e in G.edges():
-        # Convert node labels to integers (Infomap requires integer node IDs)
         source = int(e[0])
         target = int(e[1])
         im.add_link(source, target)
@@ -26,7 +25,6 @@ def run_infomap(G):
 def run_louvain(G):
     partition = community_louvain.best_partition(G)
 
-    # Convert partition format
     communities = {}
     for node, comm_id in partition.items():
         if comm_id not in communities:
@@ -36,10 +34,7 @@ def run_louvain(G):
     return list(communities.values())
 
 def run_leiden(G):
-    # Convert NetworkX graph to igraph for Leiden algorithm
     communities = algorithms.leiden(G).communities
-
-    # Ensure all node IDs are strings for consistency
     return [[str(node) for node in comm] for comm in communities]
 
 

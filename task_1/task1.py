@@ -7,7 +7,8 @@ from task_1.algos import run_infomap, run_louvain, run_leiden
 from task_1.constants import PRR_VALUES, RESULTS_DIR
 from task_1.task_1_utils import get_true_communities, load_network, save_communities_to_clu, calculate_modularity, \
     compare_partitions
-from task_1.visuals import visualize_network, plot_results
+from task_1.visuals import visualize_network, plot_results, compare_algorithms
+
 
 def analyze_networks():
     true_communities = get_true_communities()
@@ -17,6 +18,7 @@ def analyze_networks():
         'algorithm': [],
         'num_communities': [],
         'modularity': [],
+        'jaccard': [],
         'nmi': [],
         'variation_of_info': []
     }
@@ -54,6 +56,7 @@ def analyze_networks():
                 results['algorithm'].append(algo_name)
                 results['num_communities'].append(len(communities))
                 results['modularity'].append(modularity)
+                results['jaccard'].append(comparison['jaccard'])  # Add Jaccard result here
                 results['nmi'].append(comparison['nmi'])
                 results['variation_of_info'].append(comparison['variation_of_info'])
 
@@ -75,11 +78,11 @@ def analyze_networks():
 
     return results_df
 
-
 if __name__ == "__main__":
     print("Starting analysis of synthetic networks...")
     try:
         results_df = analyze_networks()
+        comparison_df = compare_algorithms(results_df)
         print("Plotting results...")
         plot_results(results_df)
         print("Analysis complete. Results saved to the 'results' directory.")
