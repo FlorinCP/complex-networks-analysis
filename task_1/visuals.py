@@ -55,7 +55,7 @@ def visualize_network(G, communities, filename, node_positions=None):
     plt.legend(handles=legend_handles, title='Communities',
                loc='upper right', bbox_to_anchor=(1.1, 1))
 
-    plt.title(f"Communities: {len(communities)}")
+    plt.title(f"{filename}")
     plt.axis('off')
     plt.tight_layout()
     plt.savefig(os.path.join(RESULTS_DIR, filename), dpi=300)
