@@ -101,15 +101,6 @@ def compare_algorithms(results_df):
         comparison_table.append(row)
 
     # Convert to DataFrame and print
-    comparison_df = pd.DataFrame(comparison_table)
-    print("\nAlgorithm Comparison Table:")
-    print(comparison_df.to_string())
-
-    print("\nAverage metrics per algorithm:")
-    algorithm_averages = results_df.groupby('algorithm').mean()
-    print(algorithm_averages[['num_communities', 'modularity', 'jaccard', 'nmi']])
-
-    print("\nCases with largest differences in number of communities:")
     for prr, group in prr_groups:
         if len(group) >= 3:  # Ensure we have all three algorithms
             max_comm = group['num_communities'].max()
@@ -120,33 +111,26 @@ def compare_algorithms(results_df):
     # VISUALIZATION 1: Bar chart comparing number of communities for each prr value
     plt.figure(figsize=(12, 6))
 
-    # Get unique prr values and algorithms
     prr_values = sorted(results_df['prr'].unique())
     algorithms = ['Infomap', 'Louvain', 'Leiden']
 
-    # Set the positions for grouped bars
     bar_width = 0.25
     r1 = np.arange(len(prr_values))
     r2 = [x + bar_width for x in r1]
     r3 = [x + bar_width for x in r2]
 
-    # Create bars for each algorithm
     for i, algo in enumerate(['Infomap', 'Louvain', 'Leiden']):
         algo_data = results_df[results_df['algorithm'] == algo]
 
-        # Create a position-to-value mapping
         value_map = {}
         for _, row in algo_data.iterrows():
             value_map[row['prr']] = row['num_communities']
 
-        # Get values in the same order as prr_values
         values = [value_map.get(prr, 0) for prr in prr_values]
 
-        # Plot at the correct position
         r = [r1, r2, r3][i]
         plt.bar(r, values, width=bar_width, label=algo)
 
-    # Add labels and legend
     plt.xlabel('prr value')
     plt.ylabel('Number of Communities')
     plt.title('Number of Communities Detected by Each Algorithm')
@@ -163,7 +147,6 @@ def compare_algorithms(results_df):
     for algo in algorithms:
         algo_data = results_df[results_df['algorithm'] == algo]
 
-        # Sort by prr for line plotting
         sorted_data = algo_data.sort_values('prr')
 
         plt.plot(sorted_data['prr'], sorted_data['modularity'], 'o-', label=algo)
@@ -174,7 +157,6 @@ def compare_algorithms(results_df):
     plt.legend()
     plt.grid(True, alpha=0.3)
 
-    # Use logarithmic x-axis if values are suitable
     if all(x > 0 for x in prr_values):
         plt.xscale('log')
 
