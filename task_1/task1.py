@@ -56,7 +56,7 @@ def analyze_networks():
                 results['algorithm'].append(algo_name)
                 results['num_communities'].append(len(communities))
                 results['modularity'].append(modularity)
-                results['jaccard'].append(comparison['jaccard'])  # Add Jaccard result here
+                results['jaccard'].append(comparison['jaccard'])
                 results['nmi'].append(comparison['nmi'])
                 results['variation_of_info'].append(comparison['variation_of_info'])
 

@@ -1,18 +1,34 @@
 import os
 
 import networkx as nx
-import pandas as pd
 from matplotlib import pyplot as plt
 
 from task_1.constants import RESULTS_DIR
-from task_1.task_1_utils import communities_to_node2comm
 
 
 def visualize_network(G, communities, filename, node_positions=None):
     plt.figure(figsize=(10, 8))
 
-    node2comm = communities_to_node2comm(communities)
-    node_colors = [node2comm.get(node, -1) for node in G.nodes()]
+    node2comm = {}
+    for i, comm in enumerate(communities):
+        for node in comm:
+            node2comm[node] = i
+
+    custom_colors = [
+        '#377eb8',  # Blue
+        '#ff7f00',  # Orange
+        '#4daf4a',  # Green
+        '#f781bf',  # Pink
+        '#a65628',  # Brown
+        '#984ea3',  # Purple
+        '#e41a1c',  # Red
+        '#dede00'  # Yellow
+    ]
+
+    while len(custom_colors) < len(communities):
+        custom_colors.extend(custom_colors)
+
+    node_colors = [custom_colors[node2comm.get(node, 0) % len(custom_colors)] for node in G.nodes()]
 
     if node_positions is None:
         pos = nx.kamada_kawai_layout(G)
@@ -23,12 +39,21 @@ def visualize_network(G, communities, filename, node_positions=None):
         G,
         pos=pos,
         node_color=node_colors,
-        cmap=plt.cm.tab20,
         node_size=50,
         with_labels=False,
         edge_color='lightgray',
         alpha=0.8
     )
+
+    legend_handles = []
+    for i in range(len(communities)):
+        color = custom_colors[i % len(custom_colors)]
+        legend_handles.append(plt.Line2D([0], [0], marker='o', color='w',
+                                         markerfacecolor=color, markersize=10,
+                                         label=f'Community {i + 1}'))
+
+    plt.legend(handles=legend_handles, title='Communities',
+               loc='upper right', bbox_to_anchor=(1.1, 1))
 
     plt.title(f"Communities: {len(communities)}")
     plt.axis('off')
