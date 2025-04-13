@@ -125,15 +125,13 @@ def compare_algorithms(results_df):
 
         comparison_table.append(row)
 
-    # Convert to DataFrame and print
     for prr, group in prr_groups:
-        if len(group) >= 3:  # Ensure we have all three algorithms
+        if len(group) >= 3:
             max_comm = group['num_communities'].max()
             min_comm = group['num_communities'].min()
             if max_comm - min_comm > 0:
                 print(f"prr={prr}: Range of communities: {min_comm} to {max_comm}")
 
-    # VISUALIZATION 1: Bar chart comparing number of communities for each prr value
     plt.figure(figsize=(12, 6))
 
     prr_values = sorted(results_df['prr'].unique())
@@ -166,7 +164,6 @@ def compare_algorithms(results_df):
     plt.savefig(os.path.join(RESULTS_DIR, "algorithm_community_comparison.png"), dpi=300)
     plt.close()
 
-    # VISUALIZATION 2: Line chart comparing modularity values
     plt.figure(figsize=(10, 6))
 
     for algo in algorithms:

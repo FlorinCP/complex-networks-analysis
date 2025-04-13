@@ -26,14 +26,11 @@ def analyze_networks():
     reference_positions = None
 
     for prr in tqdm(PRR_VALUES, desc="Processing networks"):
-        # Format the filename with correct prr value
         filename = f"synthetic_network_N_300_blocks_5_prr_{prr:.2f}_prs_0.02.net"
-        print(f"\nProcessing network with prr={prr}")
 
         try:
             G = load_network(filename)
 
-            # If this is the most connected network, calculate positions for visualization reference
             if prr == 1.0:
                 reference_positions = nx.kamada_kawai_layout(G)
 
@@ -83,9 +80,7 @@ if __name__ == "__main__":
     try:
         results_df = analyze_networks()
         comparison_df = compare_algorithms(results_df)
-        print("Plotting results...")
         plot_results(results_df)
-        print("Analysis complete. Results saved to the 'results' directory.")
     except Exception as e:
         print(f"Error during analysis: {str(e)}")
         import traceback
